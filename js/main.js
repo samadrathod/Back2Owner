@@ -1,3 +1,10 @@
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  }
+});
 import { db } from "./firebase.js";
 import { collection, addDoc, getDocs } from 
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -34,3 +41,11 @@ async function loadItems() {
     console.log("📦 Items loaded from Firestore");
 }
 loadItems();
+import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+});
