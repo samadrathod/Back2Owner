@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width,initial-scale=1.0">
+        <title> Add Item </title>
+        <link rel="stylesheet" href="CSS/style.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1> Add Found Item</h1>
+            <a href="index.html">
+                <button> Back to Listed items </button>
+            </a><br><br>
+            <form id="addItemForm">
+                <input type="text" id="itemName"
+                placeholder="item name" required><br><br>
+                <input type="text"
+                id="itemLocation" placeholder="where you found" required><br><br>
+                <textarea id="itemDescription"
+                placeholder="Description" required></textarea><br><br>
+                <button type="submit">submit</button>
+            </form>
+        </div>
+        <script type="module" src="js/firebase.js"></script>
+        <script type="module" src="js/addItem.js"></script>
+    </body>
+</html>
