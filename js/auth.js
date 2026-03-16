@@ -10,18 +10,32 @@ form.addEventListener("submit", async (e) => {
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const message = document.getElementById("errorText");
+  console.log(message);
+  message.textContent = "";
    try {
     await signInWithEmailAndPassword(auth, email, password);
     console.log("Login successful");
     window.location.href = "index.html";
   } catch (error) {
-    if (error.code === "auth/user-not-found") {
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    console.log("Account created");
-    window.location.href = "index.html";
-  } catch (err) {
-    console.log(err.message);
+
+  if (error.code === "auth/user-not-found") {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Account created");
+      window.location.href = "index.html";
+    } catch (err) {
+      message.textContent = "Unable to create account";
+    }
   }
-}}
+
+  else if (error.code === "auth/wrong-password") {
+    message.textContent = "Incorrect password";
+  }
+
+  else if (error.code === "auth/invalid-email") {
+    message.textContent = "Invalid email";
+  }
+
+}
 });
