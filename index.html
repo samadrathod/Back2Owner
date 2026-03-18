@@ -6,19 +6,20 @@
         <meta name="viewport"
         content="width=device-width,
         initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
         <link rel="stylesheet" href="CSS/style.css">
     </head>
     <body>
         <header class="navbar">
             <h2> Back2Owner </h2>
-        <button id="logoutBtn">Logout</button>
+        <button id="logoutBtn" class="btn-outline">logout </button>
 
         </header>
-        <main class="container">
+        <main class="container fade-in">
+            <div class="page-header">
             <h1> Found items </h1>
-            <a href="add-item.html">
-                <button> I FOUND SOMETHING</button>
-            </a>
+            <a href="add-item.html" class="btn btn-primary"> I FOUND SOMETHING </a>
+            </div>
             <div id="itemList"></div>
         </main>
         <script type="module" src="js/firebase.js"></script>

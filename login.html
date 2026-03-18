@@ -5,198 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Back2Owner Login</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,700&display=swap">
-  <style>
-    body {
-      background: #F5F9FF;
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .illustration {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 40%;
-      background: url('https://img.freepik.com/free-vector/people-returning-lost-items-concept-illustration_114360-1234.jpg?w=900') no-repeat center/cover;
-      opacity: 0.15;
-      z-index: 0;
-    }
-    .container {
-      background: #FFFFFF;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(46,134,255,0.10);
-      width: 90%;
-      max-width: 400px;
-      padding: 32px 24px;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-    }
-    .logo {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #2E86FF;
-      margin-bottom: 4px;
-    }
-    .tagline {
-      font-size: 1rem;
-      color: #1B6FE0;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .input-group {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .input-field {
-      position: relative;
-      width: 100%;
-    }
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 14px 44px 14px 16px;
-      border-radius: 10px;
-      border: 1px solid #E0E6F3;
-      font-size: 16px;
-      background: #F5F9FF;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input[type="email"]:focus, input[type="password"]:focus {
-      border-color: #5e947f;
-    }
-    .show-hide {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      color: #5a897b;
-      user-select: none;
-    }
-    .error-text {
-      color: #FF3B3B;
-      font-size: 14px;
-      margin-top: 4px;
-      min-height: 18px;
-    }
-    .login-btn {
-      width: 100%;
-      padding: 16px;
-      border-radius: 10px;
-      background: #6a876f;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 700;
-      border: none;
-      box-shadow: 0 2px 8px rgba(46,134,255,0.15);
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .login-btn:hover, .login-btn:active {
-      background: #5e7a60;
-      transform: scale(1.03);
-    }
-    .spinner {
-      display: none;
-      margin-left: 8px;
-      border: 3px solid #fff;
-      border-top: 3px solid #2E86FF;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .links {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      font-size: 16px;
-      margin-top: 8px;
-    }
-    .links a {
-      color: #2E86FF;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .links a:hover {
-      color: #1B6FE0;
-      text-decoration: underline;
-    }
-    .social-login {
-      width: 100%;
-      margin-top: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-    }
-    .google-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      background: #fff;
-      color: #2E86FF;
-      font-size: 16px;
-      font-weight: 600;
-      border: 1px solid #E0E6F3;
-      box-shadow: 0 2px 8px rgba(46,134,255,0.08);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .google-btn:hover {
-      background: #F5F9FF;
-      border-color: #2E86FF;
-    }
-    .success-text {
-      color: #2E86FF;
-      font-size: 18px;
-      font-weight: 600;
-      margin-top: 12px;
-      text-align: center;
-      display: none;
-    }
-    @media (max-width: 600px) {
-      .container {
-        width: 90%;
-        padding: 24px 8px;
-      }
-      .logo { font-size: 1.5rem; }
-      .login-btn { font-size: 16px; padding: 14px; }
-      .google-btn { font-size: 15px; padding: 10px; }
-      input[type="email"], input[type="password"] { font-size: 15px; padding: 12px 40px 12px 12px; }
-    }
-  </style>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="CSS/style.css">
+  
 </head>
-<body>
-  <div class="illustration"></div>
-  <div class="container">
-    <div class="logo">Back2Owner</div>
-    <div class="tagline">A smarter way to return what's lost</div>
-    <form id="authform" autocomplete="off">
-      <div class="input-group">
-        <div class="input-field">
+<body class="login-page">
+  <div class="login-card fade-in">
+    <div class="login-logo">Back2Owner</div>
+    <div class="login-tagline">A smarter way to return what's lost</div>
+    <form id="authform" autocomplete="off" class="form-group">
+      <div class="input-field">
           <input type="email" id="email" placeholder="enter your email" required>
         </div>
         <div class="input-field">
@@ -204,18 +22,17 @@
           <span class="show-hide" id="togglePassword">&#128065;</span>
         </div>
         <div class="error-text" id="errorText"></div>
-      </div>
-      <button type="submit" class="login-btn" id="loginBtn">
+      <button type="submit" class="btn login-btn" id="loginBtn">
         <span>Login securely</span>
         <div class="spinner" id="spinner"></div>
       </button>
     </form>
-    <div class="links">
+    <div class="login-links">
       <a href="#">Forget password?</a>
       <a href="#">Create new account</a>
     </div>
     <div class="social-login">
-      <button class="google-btn">
+      <button class="btn google-btn">
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="22" height="22">
         Login with Google
       </button>

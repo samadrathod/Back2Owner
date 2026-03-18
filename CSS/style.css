@@ -171,6 +171,20 @@ button {
     transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
+/* base button */
+.btn {
+    display: inline-block;
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+}
+
 /* Primary Button */
 .btn-primary {
     background: var(--primary);
@@ -355,6 +369,29 @@ textarea {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+}
+
+.input-field {
+    position: relative;
+    width: 100%;
+}
+
+.show-hide {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-muted);
+    user-select: none;
+}
+
+.social-login {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
 }
 
 .login-logo {
