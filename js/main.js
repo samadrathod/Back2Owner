@@ -1,18 +1,24 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+import { collection, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const foundItemsRef = collection(db, "foundItems");
 let currentUser = null;
 
 // Page protect + load items after auth is confirmed
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-  } else {
-    currentUser = user;
-    loadItems();
-  }
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        currentUser = user;
+
+        // Check if admin and show admin link
+        const adminDoc = await getDoc(doc(db, "admins", user.uid));
+        if (adminDoc.exists()) {
+            document.getElementById("adminLink").style.display = "inline-block";
+        }
+
+        loadItems();
+    }
 });
 
 async function loadItems() {
@@ -23,7 +29,24 @@ async function loadItems() {
   querySnapshot.forEach((docSnap) => {
     const item = docSnap.data();
     const itemId = docSnap.id;
+    
+  // Lightbox
+document.body.insertAdjacentHTML("beforeend", `
+    <div class="lightbox" id="lightbox">
+        <img id="lightboxImg" src="" alt="Full image">
+    </div>
+`);
 
+document.getElementById("itemList").addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG") {
+        document.getElementById("lightboxImg").src = e.target.src;
+        document.getElementById("lightbox").classList.add("active");
+    }
+});
+
+document.getElementById("lightbox").addEventListener("click", () => {
+    document.getElementById("lightbox").classList.remove("active");
+});
     // Only show delete button if this item belongs to the logged-in user
     const deleteBtn = item.createdBy === currentUser.uid
       ? `<button class="btn btn-danger delete-btn" data-id="${itemId}"> 🗑 Delete</button>`
