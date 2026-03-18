@@ -3,7 +3,7 @@ import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection,addDoc } from 
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-//page protect ride=irect
+//page protect rideirect
 onAuthStateChanged(auth,(user) =>{
     if(!user) {
         window.location.href="login.html";
@@ -33,6 +33,6 @@ form.addEventListener("submit",async (e) =>{
     console.log("item added successfully");
     window.location.href="index.html";
 } catch (error){
-    console.log("Error adding item:",ErrorEvent.message);
+    console.log("Error adding item:",error.message);
     }
 });
