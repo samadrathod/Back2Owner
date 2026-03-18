@@ -3,7 +3,7 @@ import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection,addDoc } from 
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-//page protect rideirect
+//page protect redirect
 onAuthStateChanged(auth,(user) =>{
     if(!user) {
         window.location.href="login.html";
