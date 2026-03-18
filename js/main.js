@@ -20,9 +20,9 @@ async function loadItems() {
   const itemList = document.getElementById("itemList");
   itemList.innerHTML = "";
 
-  querySnapshot.forEach((document) => {
-    const item = document.data();
-    const itemId = document.id;
+  querySnapshot.forEach((docSnap) => {
+    const item = docSnap.data();
+    const itemId = docSnap.id;
 
     // Only show delete button if this item belongs to the logged-in user
     const deleteBtn = item.createdBy === currentUser.uid
