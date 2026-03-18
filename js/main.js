@@ -26,26 +26,16 @@ async function loadItems() {
 
     // Only show delete button if this item belongs to the logged-in user
     const deleteBtn = item.createdBy === currentUser.uid
-      ? `<button class="delete-btn" data-id="${itemId}" style="
-            margin-top:8px;
-            background:#ff4d4d;
-            color:white;
-            border:none;
-            padding:6px 14px;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:14px;">
-            🗑 Delete
-         </button>`
+      ? `<button class="btn btn-danger delete-btn" data-id="${itemId}"> 🗑 Delete</button>`
       : "";
 
     itemList.innerHTML += `
-      <div id="item-${itemId}" style="background:white;padding:15px;margin-bottom:10px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">
-        <h3>${item.name}</h3>
+      <div id="item-${itemId}" class="item-card fade-in">
+      <h3>${item.name}</h3>
         <p><strong>Location:</strong> ${item.location}</p>
         <p>${item.description}</p>
-        <p>Status: ${item.status}</p>
-        ${deleteBtn}
+        <span class="badge badge-available">${item.status}</span>
+        ${deleteBtn}        
       </div>
     `;
   });

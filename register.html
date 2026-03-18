@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back2Owner — Register</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body class="login-page">
+    <div class="login-card fade-in">
+        <div class="login-logo">Back2Owner</div>
+        <div class="login-tagline">Create your account</div>
+        <form id="registerForm" autocomplete="off" class="form-group">
+            <div class="input-field">
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-field">
+                <input type="password" id="password" placeholder="Create a password" required>
+                <span class="show-hide" id="togglePassword">&#128065;</span>
+            </div>
+            <div class="input-field">
+                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+            </div>
+            <div class="error-text" id="errorText"></div>
+            <button type="submit" class="btn login-btn" id="registerBtn">
+                <span>Create Account</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+        </form>
+        <div class="login-links">
+            <a href="login.html">← Back to Login</a>
+        </div>
+        <div class="success-text" id="successText">Account created! Redirecting... 🎉</div>
+    </div>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/register.js"></script>
+</body>
+</html>

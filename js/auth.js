@@ -1,7 +1,9 @@
 import { auth } from "./firebase.js"
 import {
     signInWithEmailAndPassword,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const form = document.getElementById("authform");
@@ -99,6 +101,24 @@ forgotLink.addEventListener("click", async (e) => {
             alert("Please enter a valid email address.");
         } else {
             alert("Something went wrong. Please try again.");
+        }
+    }
+});
+// Google Login
+const googleBtn = document.querySelector(".google-btn");
+const provider = new GoogleAuthProvider();
+
+googleBtn.addEventListener("click", async () => {
+    try {
+        await signInWithPopup(auth, provider);
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("Google login error:", error.code);
+        const message = document.getElementById("errorText");
+        if (error.code === "auth/popup-closed-by-user") {
+            message.textContent = "Login cancelled. Please try again.";
+        } else {
+            message.textContent = "Google login failed. Please try again.";
         }
     }
 });
