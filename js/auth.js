@@ -1,6 +1,7 @@
 import { auth } from "./firebase.js"
 import {
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const form = document.getElementById("authform");
@@ -64,4 +65,40 @@ form.addEventListener("submit", async (e) => {
     spinner.style.display = "none";
     loginBtn.disabled = false;
   }
+});
+// Show/Hide password toggle
+const togglePassword = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("password");
+
+togglePassword.addEventListener("click", () => {
+    // Check current type and switch it
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.textContent = "🙈"; // hide icon
+    } else {
+        passwordInput.type = "password";
+        togglePassword.textContent = "👁️"; // show icon
+    }
+});
+// Forgot Password
+const forgotLink = document.querySelector(".login-links a:first-child");
+
+forgotLink.addEventListener("click", async (e) => {
+    e.preventDefault(); // stop the # from jumping
+
+    const email = prompt("Enter your email to reset your password:");
+    if (!email) return; // user cancelled
+
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Password reset email sent! Check your inbox.");
+    } catch (error) {
+        if (error.code === "auth/user-not-found") {
+            alert("No account found with that email.");
+        } else if (error.code === "auth/invalid-email") {
+            alert("Please enter a valid email address.");
+        } else {
+            alert("Something went wrong. Please try again.");
+        }
+    }
 });
