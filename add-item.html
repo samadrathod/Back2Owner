@@ -5,22 +5,21 @@
         <meta name="viewport"
         content="width=device-width,initial-scale=1.0">
         <title> Add Item </title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
         <link rel="stylesheet" href="CSS/style.css">
     </head>
     <body>
-        <div class="container">
+        <div class="container fade-in">
             <h1> Add Found Item</h1>
-            <a href="index.html">
-                <button> Back to Listed items </button>
-            </a><br><br>
-            <form id="addItemForm">
+            <a href="index.html" class="back-link">← Back to Listed items</a>
+            <form id="addItemForm" class="form-group">
                 <input type="text" id="itemName"
-                placeholder="item name" required><br><br>
+                placeholder="item name" required>
                 <input type="text"
-                id="itemLocation" placeholder="where you found" required><br><br>
+                id="itemLocation" placeholder="where you found (eg.m001)" required>
                 <textarea id="itemDescription"
                 placeholder="Description" required></textarea><br><br>
-                <button type="submit">submit</button>
+                <button type="submit" class="btn-primary w-full">Submit</button>
             </form>
         </div>
         <script type="module" src="js/firebase.js"></script>
