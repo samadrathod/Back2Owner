@@ -28,16 +28,15 @@ async function loadItems() {
     const deleteBtn = item.createdBy === currentUser.uid
       ? `<button class="btn btn-danger delete-btn" data-id="${itemId}"> 🗑 Delete</button>`
       : "";
-
-    itemList.innerHTML += `
-      <div id="item-${itemId}" class="item-card fade-in">
-      <h3>${item.name}</h3>
+itemList.innerHTML += `
+    <div id="item-${itemId}" class="item-card fade-in">
+        ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--spacing-md);">` : ""}
+        <h3>${item.name}</h3>
         <p><strong>Location:</strong> ${item.location}</p>
         <p>${item.description}</p>
         <span class="badge badge-available">${item.status}</span>
-        ${deleteBtn}        
-      </div>
-    `;
+        ${deleteBtn}
+    </div>`;    
   });
 
   console.log("📦 Items loaded from Firestore");
