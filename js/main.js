@@ -32,6 +32,19 @@ async function loadItems() {
         itemList.innerHTML = "<p class='text-muted text-center mt-md'>No items listed yet.</p>";
         return;
     }
+    // Auto delete claimed items after 5 hours
+const fiveHoursAgo = new Date(Date.now() - 5 * 60 * 60 * 1000);
+
+for (const docSnap of querySnapshot.docs) {
+    const item = docSnap.data();
+    if (item.status === "Claimed" && item.claimedAt) {
+        const claimedAt = item.claimedAt.toDate();
+        if (claimedAt < fiveHoursAgo) {
+            await deleteDoc(doc(db, "items", docSnap.id));
+            console.log("🧹 Auto deleted claimed item:", docSnap.id);
+        }
+    }
+}
 
     querySnapshot.forEach((docSnap) => {
         const item = docSnap.data();
@@ -61,6 +74,11 @@ const badge = item.status === "Claimed"
     : item.type === "found"
         ? `<span class="badge badge-available">✅ Found</span>`
         : `<span class="badge badge-claimed">❗ Missing</span>`;
+const openChatBtn = item.type === "found"
+    && isOwner
+    && item.status === "Pending"
+    ? `<a href="chat.html?itemId=${itemId}" class="btn btn-primary mt-md">💬 Someone claims this!</a>`
+    : "";
 
 itemList.innerHTML += `
     <div id="item-${itemId}" class="item-card fade-in">
@@ -72,6 +90,7 @@ itemList.innerHTML += `
         <p>${item.description}</p>
         ${badge}
         <div class="flex gap-sm mt-md">
+            ${openChatBtn}
             ${claimBtn}
             ${deleteBtn}
         </div>

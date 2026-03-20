@@ -176,7 +176,8 @@ document.getElementById("markClaimedBtn").addEventListener("click", async () => 
     try {
         // Update item status
         await updateDoc(doc(db, "items", itemId), {
-            status: "Claimed"
+            status: "Claimed",
+            claimedAt: new Date()
         });
 
         // Delete entire chat
