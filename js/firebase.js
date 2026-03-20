@@ -15,3 +15,6 @@ const db = getFirestore(app);
 export { auth, db };
 
 console.log("🔥 Firebase connected successfully");
+console.log("%c Back2Owner ", "background:#2E86FF;color:white;font-size:20px;font-weight:bold;border-radius:6px;padding:6px 12px;");
+console.log("%c Built by Samad 👨‍💻 ", "color:#00C9A7;font-size:13px;");
+console.log("%c Minor Project — 2025 ", "color:#5A6A8A;font-size:12px;");
