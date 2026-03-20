@@ -37,43 +37,49 @@ async function loadItems() {
         const item = docSnap.data();
         const itemId = docSnap.id;
 
-        // Different badge for found vs lost
-        const badge = item.type === "found"
-            ? `<span class="badge badge-available">✅ Found</span>`
-            : `<span class="badge badge-claimed">❗ Missing</span>`;
-
         // Location label differs too
         const location = item.type === "found"
             ? `<p><strong>Found at:</strong> ${item.location}</p>`
             : `<p><strong>Last seen:</strong> ${item.lastLocation}</p>`;
 
-        // Delete button only for own items
-        const isOwner = item.type === "found"
-            ? item.createdBy === currentUser.uid
-            : item.reportedBy === currentUser.uid;
+ const isOwner = item.type === "found"
+    ? item.createdBy === currentUser.uid
+    : item.reportedBy === currentUser.uid;
 
-        const deleteBtn = isOwner
-            ? `<button class="btn btn-danger delete-btn mt-md" data-id="${itemId}">🗑 Delete</button>`
-            : "";
+const deleteBtn = isOwner
+    ? `<button class="btn btn-danger delete-btn mt-md" data-id="${itemId}">🗑 Delete</button>`
+    : "";
 
-        itemList.innerHTML += `
-            <div id="item-${itemId}" class="item-card fade-in">
-                ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" 
-                style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);
-                margin-bottom:var(--spacing-md);cursor:pointer;" title="Click to view full image">` : ""}
-                <h3>${item.name}</h3>
-                ${location}
-                <p>${item.description}</p>
-                ${badge}
-                ${deleteBtn}
-            </div>
-        `;
+// Claim button — only on found items, only for non-owners
+const claimBtn = item.type === "found" && !isOwner && item.status !== "Claimed"
+    ? `<a href="chat.html?itemId=${itemId}" class="btn btn-accent mt-md">🙋 This is Mine!</a>`
+    : "";
+
+// Claimed status override
+const badge = item.status === "Claimed"
+    ? `<span class="badge badge-claimed-status">✅ Claimed</span>`
+    : item.type === "found"
+        ? `<span class="badge badge-available">✅ Found</span>`
+        : `<span class="badge badge-claimed">❗ Missing</span>`;
+
+itemList.innerHTML += `
+    <div id="item-${itemId}" class="item-card fade-in">
+        ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" 
+        style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);
+        margin-bottom:var(--spacing-md);cursor:pointer;" title="Click to view full image">` : ""}
+        <h3>${item.name}</h3>
+        ${location}
+        <p>${item.description}</p>
+        ${badge}
+        <div class="flex gap-sm mt-md">
+            ${claimBtn}
+            ${deleteBtn}
+        </div>
+    </div>
+`;
     });
-
-    console.log("📦 Items loaded from Firestore");
-}
-
-// Delete handler
+  }
+    // Delete handler
 document.getElementById("itemList").addEventListener("click", async (e) => {
     if (e.target.classList.contains("delete-btn")) {
         const id = e.target.dataset.id;
@@ -90,7 +96,6 @@ document.getElementById("itemList").addEventListener("click", async (e) => {
         }
     }
 });
-
 // Lightbox
 document.body.insertAdjacentHTML("beforeend", `
     <div class="lightbox" id="lightbox">

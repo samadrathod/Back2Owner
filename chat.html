@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back2Owner — Chat</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <h2>Back2Owner</h2>
+        <a href="index.html" class="btn btn-outline">← Back</a>
+    </header>
+    <main class="container fade-in">
+        <div class="page-header">
+            <div>
+                <h1 id="chatItemName">Chat</h1>
+                <p class="text-muted" id="chatSubtitle">Connecting you with the finder...</p>
+            </div>
+            <button id="markClaimedBtn" class="btn btn-accent" style="display:none;">
+                ✅ Mark as Claimed
+            </button>
+        </div>
+
+        <!-- Expiry notice -->
+        <p class="text-muted mb-md" id="expiryNotice"></p>
+
+        <!-- Chat box -->
+        <div class="chat-box">
+            <div class="chat-messages" id="chatMessages">
+                <p class="text-muted text-center">Loading messages...</p>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button class="btn btn-primary" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/chat.js"></script>
+</body>
+</html>
