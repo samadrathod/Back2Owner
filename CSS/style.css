@@ -135,6 +135,12 @@ img {
     letter-spacing: -0.5px;
 }
 
+/* -- Logo -- */
+.navbar img {
+    height: 100px;
+    object-fit: contain;
+}
+
 /* -- Container -- */
 .container {
     width: 90%;
@@ -194,6 +200,7 @@ button {
 
 .btn-primary:hover {
     background: var(--primary-dark);
+    color: ivory;
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
@@ -206,7 +213,8 @@ button {
 
 .btn-accent:hover {
     background: var(--accent-dark);
-    transform: translateY(-1px);
+    color: darkred;
+    transform: translateY(+1px);
 }
 
 /* Danger Button */
