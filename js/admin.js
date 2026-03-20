@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, deleteDoc, doc, getDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Check if current user is admin
 async function isAdmin(uid) {
@@ -26,7 +26,8 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 async function loadAllItems() {
-    const querySnapshot = await getDocs(collection(db, "foundItems"));
+    const q = query(collection(db, "items"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
     const adminItemList = document.getElementById("adminItemList");
     adminItemList.innerHTML = "";
 
@@ -39,14 +40,31 @@ async function loadAllItems() {
         const item = docSnap.data();
         const itemId = docSnap.id;
 
+        // Different badge for found vs lost
+        const badge = item.type === "found"
+            ? `<span class="badge badge-available">✅ Found</span>`
+            : `<span class="badge badge-claimed">❗ Missing</span>`;
+
+        // Location label differs
+        const location = item.type === "found"
+            ? `<p><strong>Found at:</strong> ${item.location}</p>`
+            : `<p><strong>Last seen:</strong> ${item.lastLocation}</p>`;
+
+        // Posted by — differs for found vs lost
+        const postedBy = item.type === "found"
+            ? item.createdBy
+            : item.reportedBy;
+
         adminItemList.innerHTML += `
             <div id="item-${itemId}" class="item-card fade-in">
-                ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--spacing-md);">` : ""}
+                ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" 
+                style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);
+                margin-bottom:var(--spacing-md);">` : ""}
                 <h3>${item.name}</h3>
-                <p><strong>Location:</strong> ${item.location}</p>
+                ${location}
                 <p>${item.description}</p>
-                <p class="text-muted"><strong>Posted by:</strong> ${item.createdBy}</p>
-                <span class="badge badge-available">${item.status}</span>
+                <p class="text-muted"><strong>Posted by:</strong> ${postedBy}</p>
+                ${badge}
                 <button class="btn btn-danger delete-btn mt-md" data-id="${itemId}">🗑 Delete Item</button>
             </div>
         `;
@@ -61,7 +79,7 @@ document.getElementById("adminItemList").addEventListener("click", async (e) => 
         if (!confirmed) return;
 
         try {
-            await deleteDoc(doc(db, "foundItems", id));
+            await deleteDoc(doc(db, "items", id));
             document.getElementById(`item-${id}`).remove();
             console.log("🗑 Admin deleted item:", id);
         } catch (error) {

@@ -42,7 +42,8 @@ form.addEventListener("submit",async (e) =>{
         if (imageFile) {
             imageUrl = await uploadImageToCloudinary(imageFile);
         }
-     await addDoc(collection(db, "foundItems"), {
+     await addDoc(collection(db, "items"), {
+        type: "found",
         name: name,
         location: location,
         description: description,

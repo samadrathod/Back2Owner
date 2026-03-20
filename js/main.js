@@ -1,7 +1,7 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const foundItemsRef = collection(db, "foundItems");
+import { collection, getDocs, deleteDoc, doc, getDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 let currentUser = null;
 
 // Page protect + load items after auth is confirmed
@@ -22,15 +22,76 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 async function loadItems() {
-  const querySnapshot = await getDocs(foundItemsRef);
-  const itemList = document.getElementById("itemList");
-  itemList.innerHTML = "";
+    // Query items sorted by newest first
+    const q = query(collection(db, "items"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const itemList = document.getElementById("itemList");
+    itemList.innerHTML = "";
 
-  querySnapshot.forEach((docSnap) => {
-    const item = docSnap.data();
-    const itemId = docSnap.id;
-    
-  // Lightbox
+    if (querySnapshot.empty) {
+        itemList.innerHTML = "<p class='text-muted text-center mt-md'>No items listed yet.</p>";
+        return;
+    }
+
+    querySnapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+        const itemId = docSnap.id;
+
+        // Different badge for found vs lost
+        const badge = item.type === "found"
+            ? `<span class="badge badge-available">✅ Found</span>`
+            : `<span class="badge badge-claimed">❗ Missing</span>`;
+
+        // Location label differs too
+        const location = item.type === "found"
+            ? `<p><strong>Found at:</strong> ${item.location}</p>`
+            : `<p><strong>Last seen:</strong> ${item.lastLocation}</p>`;
+
+        // Delete button only for own items
+        const isOwner = item.type === "found"
+            ? item.createdBy === currentUser.uid
+            : item.reportedBy === currentUser.uid;
+
+        const deleteBtn = isOwner
+            ? `<button class="btn btn-danger delete-btn mt-md" data-id="${itemId}">🗑 Delete</button>`
+            : "";
+
+        itemList.innerHTML += `
+            <div id="item-${itemId}" class="item-card fade-in">
+                ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" 
+                style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);
+                margin-bottom:var(--spacing-md);cursor:pointer;" title="Click to view full image">` : ""}
+                <h3>${item.name}</h3>
+                ${location}
+                <p>${item.description}</p>
+                ${badge}
+                ${deleteBtn}
+            </div>
+        `;
+    });
+
+    console.log("📦 Items loaded from Firestore");
+}
+
+// Delete handler
+document.getElementById("itemList").addEventListener("click", async (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+        const id = e.target.dataset.id;
+        const confirmed = confirm("Are you sure you want to delete this?");
+        if (!confirmed) return;
+
+        try {
+            await deleteDoc(doc(db, "items", id));
+            document.getElementById(`item-${id}`).remove();
+            console.log("🗑 Item deleted:", id);
+        } catch (error) {
+            console.error("Error deleting item:", error.message);
+            alert("Failed to delete. Please try again.");
+        }
+    }
+});
+
+// Lightbox
 document.body.insertAdjacentHTML("beforeend", `
     <div class="lightbox" id="lightbox">
         <img id="lightboxImg" src="" alt="Full image">
@@ -47,44 +108,9 @@ document.getElementById("itemList").addEventListener("click", (e) => {
 document.getElementById("lightbox").addEventListener("click", () => {
     document.getElementById("lightbox").classList.remove("active");
 });
-    // Only show delete button if this item belongs to the logged-in user
-    const deleteBtn = item.createdBy === currentUser.uid
-      ? `<button class="btn btn-danger delete-btn" data-id="${itemId}"> 🗑 Delete</button>`
-      : "";
-itemList.innerHTML += `
-    <div id="item-${itemId}" class="item-card fade-in">
-        ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--spacing-md);">` : ""}
-        <h3>${item.name}</h3>
-        <p><strong>Location:</strong> ${item.location}</p>
-        <p>${item.description}</p>
-        <span class="badge badge-available">${item.status}</span>
-        ${deleteBtn}
-    </div>`;    
-  });
-
-  console.log("📦 Items loaded from Firestore");
-}
-
-// Delete handler using event delegation
-document.getElementById("itemList").addEventListener("click", async (e) => {
-  if (e.target.classList.contains("delete-btn")) {
-    const id = e.target.dataset.id;
-    const confirmed = confirm("Are you sure you want to delete this item?");
-    if (!confirmed) return;
-
-    try {
-      await deleteDoc(doc(db, "foundItems", id));
-      document.getElementById(`item-${id}`).remove(); // remove from UI instantly
-      console.log("🗑 Item deleted:", id);
-    } catch (error) {
-      console.error("Error deleting item:", error.message);
-      alert("Failed to delete item. Please try again.");
-    }
-  }
-});
 
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await signOut(auth);
-  window.location.href = "login.html";
+    await signOut(auth);
+    window.location.href = "login.html";
 });
